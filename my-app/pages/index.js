@@ -19,11 +19,11 @@ export default function Home() {
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect()
-    const web3Provider = new getProviderOrSigner.Web3Provider(provider)
+    const web3Provider = new providers.Web3Provider(provider)
 
     //if user not connect to goerli network throw error and alert
     const { chainId } = await web3Provider.getNetwork()
-    if (chain !== 5) {
+    if (chainId !== 5) {
       window.alert("Change the network to Goerli")
       throw new Error("Change network to Goerli")
     }
@@ -48,7 +48,7 @@ export default function Home() {
       )
 
       // call the addAddressToWhitelist from the contract
-      const tx = await whitelistContract.addAddressToWhitelist()
+      const tx = await whitelistContract.addAddressToWhiteList()
       setLoading(true)
 
       //wait for transaction to finsh
@@ -179,6 +179,7 @@ export default function Home() {
       </Head>
       <div className={styles.main}>
         <div>
+          {console.log(walletConnected)}
           <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
           <div className={styles.description}>
             Its an NFT collection for developers in Crypto.
