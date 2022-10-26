@@ -179,7 +179,6 @@ export default function Home() {
       </Head>
       <div className={styles.main}>
         <div>
-          {console.log(walletConnected)}
           <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
           <div className={styles.description}>
             Its an NFT collection for developers in Crypto.
