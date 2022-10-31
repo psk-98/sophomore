@@ -10,4 +10,4 @@ the next two links might not be full operational when you see this, I will updat
 
 [DAO](https://dao-lw3.netlify.app/)
 
-[Exchange](https://dex-lw3.netlify.app/)
+[DEX](https://dex-lw3.netlify.app/)
