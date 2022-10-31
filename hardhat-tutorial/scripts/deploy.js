@@ -6,6 +6,9 @@ async function main() {
   const FakeNFTMarketplace = await ethers.getContractFactory(
     "FakeNFTMarketplace"
   )
+  console.log("Deploying FakeNFTMarketplace...")
+  console.log("...............................................")
+
   const fakeNftMarketplace = await FakeNFTMarketplace.deploy()
   await fakeNftMarketplace.deployed()
 
@@ -13,13 +16,16 @@ async function main() {
 
   // Now deploy the CryptoDevsDAO contract
   const CryptoDevsDAO = await ethers.getContractFactory("CryptoDevsDAO")
+  console.log("Deploying DAO...")
+  console.log("...............................................")
+
   const cryptoDevsDAO = await CryptoDevsDAO.deploy(
     fakeNftMarketplace.address,
     CRYPTODEVS_NFT_CONTRACT_ADDRESS,
     {
       // This assumes your account has at least 1 ETH in it's account
       // Change this value as you want
-      value: ethers.utils.parseEther("1"),
+      value: ethers.utils.parseEther("0.1"),
     }
   )
   await cryptoDevsDAO.deployed()

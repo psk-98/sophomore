@@ -1,23 +1,27 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-/// FakeNFT interface
+/**
+ * Interface for the FakeNFTMarketplace
+ */
 interface IFakeNFTMarketplace {
-  //returns price in wei for nft
+  /// @dev getPrice() returns the price of an NFT from the FakeNFTMarketplace
+  /// @return Returns the price in Wei for an NFT
   function getPrice() external view returns (uint256);
 
-  // returns whether nft of tokenID is availble
+  /// @dev available() returns whether or not the given _tokenId has already been purchased
+  /// @return Returns a boolean value - true if available, false if not
   function available(uint256 _tokenId) external view returns (bool);
 
-  ///purchase NFT with tokenId
+  /// @dev purchase() purchases an NFT from the FakeNFTMarketplace
+  /// @param _tokenId - the fake NFT tokenID to purchase
   function purchase(uint256 _tokenId) external payable;
 }
 
 /**
  * Minimal interface for CryptoDevsNFT containing only two functions
- * that we are interested in
  */
 interface ICryptoDevsNFT {
   /// @dev balanceOf returns the number of NFTs owned by the given address
@@ -55,9 +59,10 @@ contract CryptoDevsDAO is Ownable {
     mapping(uint256 => bool) voters;
   }
 
+  // Create an enum named Vote containing possible options for a vote
   enum Vote {
-    YAY, // YAY = 0
-    NAY // NAY = 1
+    YAY,
+    NAY
   }
 
   // Create a mapping of ID to Proposal
@@ -65,11 +70,15 @@ contract CryptoDevsDAO is Ownable {
   // Number of proposals that have been created
   uint256 public numProposals;
 
+  // Create a modifier which only allows a function to be
+  // called by someone who owns at least 1 CryptoDevsNFT
   modifier nftHolderOnly() {
     require(cryptoDevsNFT.balanceOf(msg.sender) > 0, "NOT_A_DAO_MEMBER");
     _;
   }
 
+  // Create a modifier which only allows a function to be
+  // called if the given proposal's deadline has not been exceeded yet
   modifier activeProposalOnly(uint256 proposalIndex) {
     require(
       proposals[proposalIndex].deadline > block.timestamp,
@@ -100,9 +109,6 @@ contract CryptoDevsDAO is Ownable {
     nftMarketplace = IFakeNFTMarketplace(_nftMarketplace);
     cryptoDevsNFT = ICryptoDevsNFT(_cryptoDevsNFT);
   }
-
-  // Create a modifier which only allows a function to be
-  // called if the given proposal's deadline has not been exceeded yet
 
   /// @dev createProposal allows a CryptoDevsNFT holder to create a new proposal in the DAO
   /// @param _nftTokenId - the tokenID of the NFT to be purchased from FakeNFTMarketplace if this proposal passes
@@ -178,8 +184,8 @@ contract CryptoDevsDAO is Ownable {
     payable(owner()).transfer(address(this).balance);
   }
 
-  // The following two functions allow the contract to accept ETH deposits
-  // directly from a wallet without calling a function
+  // The following two functions allow the contract to accept ETH deposits directly
+  // from a wallet without calling a function
   receive() external payable {}
 
   fallback() external payable {}

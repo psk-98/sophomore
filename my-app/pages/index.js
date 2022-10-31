@@ -52,7 +52,12 @@ export default function Home() {
   const getNumProposalsInDAO = async () => {
     try {
       const provider = await getProviderOrSigner()
-      const contract = getDaoContractInstance(provider)
+      const contract = new Contract(
+        CRYPTODEVS_DAO_CONTRACT_ADDRESS,
+        CRYPTODEVS_DAO_ABI,
+        provider
+      )
+      //const contract = getDaoContractInstance(provider)
       const daoNumProposals = await contract.numProposals()
       setNumProposals(daoNumProposals.toString())
     } catch (error) {
@@ -64,8 +69,14 @@ export default function Home() {
   const getUserNFTBalance = async () => {
     try {
       const signer = await getProviderOrSigner(true)
-      const nftContract = getCryptodevsNFTContractInstance(signer)
+      const nftContract = new Contract(
+        CRYPTODEVS_NFT_CONTRACT_ADDRESS,
+        CRYPTODEVS_NFT_ABI,
+        signer
+      )
+      //const nftContract = getCryptodevsNFTContractInstance(signer)
       const balance = await nftContract.balanceOf(signer.getAddress())
+      console.log(balance)
       setNftBalance(parseInt(balance.toString()))
     } catch (error) {
       console.error(error)
@@ -75,7 +86,12 @@ export default function Home() {
   const createProposal = async () => {
     try {
       const signer = await getProviderOrSigner(true)
-      const daoContract = getDaoContractInstance(signer)
+      const daoContract = new Contract(
+        CRYPTODEVS_DAO_CONTRACT_ADDRESS,
+        CRYPTODEVS_DAO_ABI,
+        signer
+      )
+      //const daoContract = getDaoContractInstance(signer)
       const txn = await daoContract.createProposal(fakeNftTokenId)
       setLoading(true)
       await txn.wait()
@@ -93,7 +109,12 @@ export default function Home() {
   const fetchProposalById = async (id) => {
     try {
       const provider = await getProviderOrSigner()
-      const daoContract = getDaoContractInstance(provider)
+      const daoContract = new Contract(
+        CRYPTODEVS_DAO_CONTRACT_ADDRESS,
+        CRYPTODEVS_DAO_ABI,
+        provider
+      )
+      //const daoContract = getDaoContractInstance(provider)
       const proposal = await daoContract.proposals(id)
       const parsedProposal = {
         proposalId: id,
@@ -128,7 +149,12 @@ export default function Home() {
   const voteOnProposal = async (proposalId, _vote) => {
     try {
       const signer = await getProviderOrSigner(true)
-      const daoContract = getDaoContractInstance(signer)
+      const daoContract = new Contract(
+        CRYPTODEVS_DAO_CONTRACT_ADDRESS,
+        CRYPTODEVS_DAO_ABI,
+        signer
+      )
+      //const daoContract = getDaoContractInstance(signer)
 
       let vote = _vote === "YAY" ? 0 : 1
       const txn = await daoContract.voteOnProposal(proposalId, vote)
@@ -147,7 +173,12 @@ export default function Home() {
   const executeProposal = async (proposalId) => {
     try {
       const signer = await getProviderOrSigner(true)
-      const daoContract = getDaoContractInstance(signer)
+      const daoContract = new Contract(
+        CRYPTODEVS_DAO_CONTRACT_ADDRESS,
+        CRYPTODEVS_DAO_ABI,
+        signer
+      )
+      //const daoContract = getDaoContractInstance(signer)
       const txn = await daoContract.executeProposal(proposalId)
       setLoading(true)
       await txn.wait()
